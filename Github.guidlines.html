@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>GitHub Collaboration Rules &amp; Agreements</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="github-collaboration-rules--agreements">GitHub Collaboration Rules &amp; Agreements</h1>
+<h2 id="1-branching-strategy">1. Branching Strategy</h2>
+<ul>
+<li>
+<p><strong>Feature branches</strong> → Create a new branch per feature or bug fix:</p>
+<ul>
+<li>Naming: <code>feature/job-crud</code>, <code>bugfix/login-error</code>, <code>hotfix/security-patch</code>.</li>
+</ul>
+</li>
+<li>
+<p>Always update your branch with the latest <code>dev</code> before making a PR.</p>
+</li>
+</ul>
+<h2 id="2-commit-message-guidelines">2. Commit Message Guidelines</h2>
+<p>Follow the <strong>Conventional Commits</strong> style:</p>
+<pre><code>&lt;type&gt;(&lt;scope&gt;): &lt;short description&gt;
+</code></pre>
+<p><strong>Types:</strong></p>
+<ul>
+<li><code>feat</code> → New feature</li>
+<li><code>fix</code> → Bug fix</li>
+<li><code>docs</code> → Documentation changes</li>
+<li><code>style</code> → Code style changes (formatting, linting)</li>
+<li><code>refactor</code> → Code restructuring without new features/bugs</li>
+<li><code>test</code> → Adding or updating tests</li>
+<li><code>chore</code> → Maintenance tasks</li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li><code>feat(auth): add JWT login endpoint</code></li>
+<li><code>fix(jobs): correct pagination bug</code></li>
+<li><code>docs(api): update job application flow</code></li>
+</ul>
+<h2 id="3-pull-requests-pr">3. Pull Requests (PR)</h2>
+<ul>
+<li>
+<p>Every change must go through a <strong>Pull Request</strong> into <code>dev</code>.</p>
+</li>
+<li>
+<p>Title should describe the change: <code>Add job application API</code>.</p>
+</li>
+<li>
+<p>PR must include:</p>
+<ul>
+<li>Clear description of the changes.</li>
+<li>Linked issue number (if any).</li>
+<li>Screenshots for UI changes (if applicable).</li>
+</ul>
+</li>
+<li>
+<p>At least <strong>1 reviewer approval</strong> required before merging.</p>
+</li>
+</ul>
+<h2 id="4-code-style">4. Code Style</h2>
+<ul>
+<li>Follow agreed <strong>linting rules</strong> (e.g., ESLint/Prettier for Node.js, PEP8 for Python).</li>
+<li>Write <strong>clean, modular, and well-documented code</strong>.</li>
+<li>Keep functions small and focused.</li>
+</ul>
+<h2 id="5-testing">5. Testing</h2>
+<ul>
+<li>Write <strong>unit tests</strong> for new features.</li>
+<li>Ensure <strong>all tests pass</strong> before opening a PR.</li>
+<li>Run <code>npm test</code> / <code>pytest</code> (depending on stack) before committing.</li>
+</ul>
+<h2 id="6-issues--task-management">6. Issues &amp; Task Management</h2>
+<ul>
+<li>Use <strong>GitHub Issues</strong> to track bugs, features, and tasks.</li>
+<li>Use <strong>labels</strong> (<code>bug</code>, <code>enhancement</code>, <code>documentation</code>, <code>urgent</code>) for clarity.</li>
+<li>Assign yourself before starting an issue to avoid conflicts.</li>
+</ul>
+<h2 id="7-collaboration--communication">7. Collaboration &amp; Communication</h2>
+<ul>
+<li>Use <strong>GitHub Discussions / Slack / Teams</strong> (as agreed) for team communication.</li>
+<li>Respect review feedback — collaboration is about improvement, not criticism.</li>
+<li>Always document big architectural or design changes in the README or Wiki.</li>
+</ul>
+<h2 id="8-dos--donts">8. Do’s &amp; Don’ts</h2>
+<p>✅ Do:</p>
+<ul>
+<li>Commit often, push regularly.</li>
+<li>Write meaningful commit messages.</li>
+<li>Keep PRs small and focused.</li>
+<li>Review others’ code respectfully.</li>
+</ul>
+<p>❌ Don’t:</p>
+<ul>
+<li>Commit directly to <code>main</code>.</li>
+<li>Push broken or untested code.</li>
+<li>Leave commented-out / debug code in PRs.</li>
+</ul>
+
+            
+            
+        </body>
+        </html>
