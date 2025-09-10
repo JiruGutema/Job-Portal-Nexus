@@ -2,8 +2,8 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 import dotenv from "dotenv";
 dotenv.config();
-//import { User } from "./models/User";
-//import { Job } from "./models/Job";
+import { User } from "./models/User";
+import { Job } from "./models/Job";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -14,7 +14,7 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME!,
   synchronize: true, // auto-create tables in dev, turn off in prod
   logging: false,
-  //entities: [User, Job], // all your entities/models here
+  entities: [User, Job], // all your entities/models here
   migrations: [],
   subscribers: [],
 });
