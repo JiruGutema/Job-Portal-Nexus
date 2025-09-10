@@ -122,14 +122,14 @@ System notifications for users.
 
 ```mermaid
 erDiagram
-    USERS ||--||{ JOB_SEEKER_PROFILE : "1 to 1"
-    USERS ||--||{ EMPLOYER_PROFILE : "1 to 1"
-    USERS ||--o{ JOBS : "1 to many"
-    USERS ||--o{ APPLICATIONS : "1 to many"
-    USERS ||--o{ SAVED_JOBS : "1 to many"
-    USERS ||--o{ NOTIFICATIONS : "1 to many"
-    JOBS ||--o{ APPLICATIONS : "1 to many"
-    JOBS ||--o{ SAVED_JOBS : "1 to many"
+    users ||--|| job_seeker_profile : "1 to 1"
+    users ||--|| employer_profile : "1 to 1"
+    users ||--o{ jobs : "1 to many"
+    users ||--o{ applications : "1 to many"
+    users ||--o{ saved_jobs : "1 to many"
+    users ||--o{ notifications : "1 to many"
+    jobs ||--o{ applications : "1 to many"
+    jobs ||--o{ saved_jobs : "1 to many"
 ```
 
 # SQL Implementation
