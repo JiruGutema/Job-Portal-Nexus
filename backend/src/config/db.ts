@@ -1,20 +1,14 @@
-import "reflect-metadata";
-import { DataSource } from "typeorm";
+import { Pool } from "pg";
 import dotenv from "dotenv";
+// Load .env variables
 dotenv.config();
-import { User } from "./models/User";
-import { Job } from "./models/Job";
 
-export const AppDataSource = new DataSource({
-  type: "postgres",
+const pool = new Pool({
+  user: process.env.DB_USER!,
   host: process.env.DB_HOST!,
-  port: Number(process.env.DB_PORT)!,
-  username: process.env.DB_USER!,
-  password: process.env.DB_PASSWORD!,
   database: process.env.DB_NAME!,
-  synchronize: true, // auto-create tables in dev, turn off in prod
-  logging: false,
-  entities: [User, Job], // all your entities/models here
-  migrations: [],
-  subscribers: [],
+  password: process.env.DB_PASSWORD || "1234",
+  port: Number(process.env.DB_PORT!),
 });
+
+export default pool;
