@@ -1,11 +1,11 @@
 import express from "express";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const app = express();
 app.use(express.json());
 
-// Import routes here later
+// Import routes here 
+app.get("/", (req, res) => {
+  res.send("🚀 Job Portal Backend is running!");
+});
 
 export default app;
