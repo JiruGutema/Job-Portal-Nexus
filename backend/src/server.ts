@@ -3,8 +3,8 @@ import pool from "./config/db";
 
 const PORT = process.env.PORT || 7777;
 
-pool.connect();
-// Event: on successful connection
+/* pool.connect();
+ */ // Event: on successful connection
 pool.on("connect", () => {
   console.log("✅ Connected to PostgreSQL");
 });
