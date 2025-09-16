@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
-import { addUser } from "../services/user.service";
+import { addUser, loginUser } from "../services/user.service";
+import jwt from "jsonwebtoken";
+import { error, log } from "console";
 
 export const createUsers = async (req: Request, res: Response) => {
   try {
@@ -35,3 +37,38 @@ export const createUsers = async (req: Request, res: Response) => {
 /* export const getAllUsers = (req: Request, res: Response) => {
   res.send("Get all users");
 }; */
+
+// Login functionality with JWT
+export const login = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password required" });
+    }
+    const user = await loginUser(email, password);
+    console.log(user);
+
+    // Generate JWT tokens
+    const token = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      },
+      process.env.JWT_SECRET || "secretKey",
+      { expiresIn: "1h" }
+    );
+    console.log(token);
+    console.log(process.env.JWT_SECRET);
+
+    // send response without password
+    delete user.password;
+    res.json({
+      message: "Login successful",
+      user,
+      token,
+    });
+  } catch (err: any) {
+    res.status(401).json({ error: err.message });
+  }
+};
