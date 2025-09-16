@@ -13,3 +13,20 @@ export const addUser = async (user: User): Promise<User> => {
   );
   return result.rows[0];
 };
+
+export const loginUser = async (email: string, password: string) => {
+  const result = await pool.query("SELECT * FROM users WHERE email = $1", [
+    email,
+  ]);
+  const user = result.rows[0];
+  if (!user) {
+    throw new Error("Invalid email or password");
+  }
+  //2️⃣ Compare password
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    throw new Error("Invalid email or password");
+  }
+
+  return user;
+};
