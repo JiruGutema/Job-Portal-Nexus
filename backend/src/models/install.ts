@@ -1,8 +1,8 @@
-import { AppDataSource } from "../config/data-source";
+import pool from "../config/db";
 const createTables = async () => {
   try {
     // Users table
-    await AppDataSource.query(`
+    await pool.query(`
      
 CREATE TABLE users (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -11,12 +11,11 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     role user_role NOT NULL
 );
-
     `);
 
     // Jobs table
-    await AppDataSource.query(`
-     CREATE TABLE jobs (
+    await pool.query(`
+    CREATE TABLE jobs (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     employer_id INT NOT NULL,
     title VARCHAR(100) NOT NULL,
@@ -39,3 +38,5 @@ CREATE TABLE users (
 };
 
 createTables();
+
+export default createTables;
