@@ -5,6 +5,7 @@ export interface EmployerProfile {
   description: string;
   industry?: string;
   logo_url?: string;
+  name?: string;
   created_at?: Date;
   updated_at?: Date;
 }
