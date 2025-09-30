@@ -55,3 +55,294 @@ paths:
           description: Successful login
         "401":
           description: Unauthorized
+
+  /profile:
+    get:
+      summary: Get logged-in user's profile (auto-detects role)
+      description: |
+        Returns the authenticated user's profile. The response contains a "role" ("seeker" or "employer") and a role-specific "profile" object.
+        - If role is "seeker", profile contains: skills (array), education, experience, resume_url.
+        - If role is "employer", profile contains: company_name, description, industry, logo_url.
+        No request body is required. Authorization: supply a Bearer JWT in the Authorization header.
+      tags:
+        - Profile
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: The authenticated user's profile (role and profile object)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  role:
+                    type: string
+                  profile:
+                    oneOf:
+                      - type: object
+                        properties:
+                          id:
+                            type: integer
+                          user_id:
+                            type: integer
+                          skills:
+                            type: array
+                            items:
+                              type: string
+                          education:
+                            type: string
+                          experience:
+                            type: string
+                          resume_url:
+                            type: string
+                          created_at:
+                            type: string
+                            format: date-time
+                          updated_at:
+                            type: string
+                            format: date-time
+                      - type: object
+                        properties:
+                          id:
+                            type: integer
+                          user_id:
+                            type: integer
+                          company_name:
+                            type: string
+                          description:
+                            type: string
+                          industry:
+                            type: string
+                          logo_url:
+                            type: string
+                          created_at:
+                            type: string
+                            format: date-time
+                          updated_at:
+                            type: string
+                            format: date-time
+                      - type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          email:
+                            type: string
+                          role:
+                            type: string
+                          created_at:
+                            type: string
+                            format: date-time
+        "401":
+          description: Unauthorized
+
+  /profile/seeker:
+    put:
+      summary: Update seeker profile
+      tags:
+        - Profile
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: At least one field must be present to update the seeker profile
+              minProperties: 1
+              properties:
+                skills:
+                  type: array
+                  items:
+                    type: string
+                education:
+                  type: string
+                experience:
+                  type: string
+                resume_url:
+                  type: string
+      responses:
+        "200":
+          description: Updated seeker profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  profile:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      user_id:
+                        type: integer
+                      skills:
+                        type: array
+                        items:
+                          type: string
+                      education:
+                        type: string
+                      experience:
+                        type: string
+                      resume_url:
+                        type: string
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden (not a seeker)
+
+  /profile/employer:
+    put:
+      summary: Update employer profile
+      tags:
+        - Profile
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: At least one field must be present to update the employer profile. Authorization required.
+              minProperties: 1
+              properties:
+                company_name:
+                  type: string
+                description:
+                  type: string
+                industry:
+                  type: string
+                  description: Industry sector for the employer/company (e.g. "Software", "Healthcare").
+                logo_url:
+                  type: string
+      responses:
+        "200":
+          description: Updated employer profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  profile:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      user_id:
+                        type: integer
+                      company_name:
+                        type: string
+                      description:
+                        type: string
+                      industry:
+                        type: string
+                      logo_url:
+                        type: string
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden (not an employer)
+
+  /profile/{id}:
+    get:
+      summary: View public profile by user id (auto-detects role)
+      tags:
+        - Profile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Public profile (role + profile)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  role:
+                    type: string
+                  profile:
+                    oneOf:
+                      - type: object
+                        properties:
+                          id:
+                            type: integer
+                          user_id:
+                            type: integer
+                          skills:
+                            type: array
+                            items:
+                              type: string
+                          education:
+                            type: string
+                          experience:
+                            type: string
+                          resume_url:
+                            type: string
+                          created_at:
+                            type: string
+                            format: date-time
+                          updated_at:
+                            type: string
+                            format: date-time
+                      - type: object
+                        properties:
+                          id:
+                            type: integer
+                          user_id:
+                            type: integer
+                          company_name:
+                            type: string
+                          description:
+                            type: string
+                          logo_url:
+                            type: string
+                          created_at:
+                            type: string
+                            format: date-time
+                          updated_at:
+                            type: string
+                            format: date-time
+                      - type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          email:
+                            type: string
+                          role:
+                            type: string
+                          created_at:
+                            type: string
+                            format: date-time
+        "404":
+          description: Profile not found
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+
