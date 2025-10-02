@@ -1,6 +1,7 @@
 import express from "express";
 import pool from "./config/db";
 import userRoutes from "./routes/user.routes";
+import profileRoutes from "./routes/profile.routes";
 
 const app = express();
 app.use(express.json());
@@ -14,7 +15,10 @@ app.get("/current-db", async (req, res) => {
   res.send(result);
 });
 
+// Mount user routes and profile routes at both /api and root for backwards compatibility
 app.use("/api", userRoutes);
-app.use("/api", userRoutes);
+app.use("/", userRoutes);
+app.use("/api", profileRoutes);
+app.use("/", profileRoutes);
 
 export default app;
