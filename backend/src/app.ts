@@ -2,7 +2,7 @@ import express from "express";
 import pool from "./config/db";
 import userRoutes from "./routes/user.routes";
 import profileRoutes from "./routes/profile.routes";
-
+import jobRoutes from './routes/job.routes';
 const app = express();
 app.use(express.json());
 
@@ -20,5 +20,5 @@ app.use("/api", userRoutes);
 app.use("/", userRoutes);
 app.use("/api", profileRoutes);
 app.use("/", profileRoutes);
-
+app.use('/api', jobRoutes);
 export default app;
