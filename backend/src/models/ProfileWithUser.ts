@@ -6,5 +6,5 @@ export interface UserInfo {
 
 export interface ProfileWithUser<T> {
   profile: T | null;
-  user?: UserInfo | null; // present when owner fetches (or when we want to expose email)
+  user?: UserInfo | null;
 }
