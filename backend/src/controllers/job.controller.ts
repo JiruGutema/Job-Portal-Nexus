@@ -56,39 +56,50 @@ export class JobController {
   }
 
   // Get all jobs with filters (Public)
-  async getAllJobs(req: Request, res: Response) {
-    try {
-      const { 
-        search, 
-        location, 
-        job_type, 
-        page, 
-        limit 
-      } = req.query;
+async getAllJobs(req: Request, res: Response) {
+  try {
+    const { 
+      search, 
+      location, 
+      job_type, 
+      page, 
+      limit 
+    } = req.query;
 
-      const filters = {
-        search: search as string,
-        location: location as string,
-        job_type: job_type as string,
-        page: page ? parseInt(page as string) : undefined,
-        limit: limit ? parseInt(limit as string) : undefined
-      };
+    const filters = {
+      search: search as string,
+      location: location as string,
+      job_type: job_type as string,
+      page: page ? parseInt(page as string) : undefined,
+      limit: limit ? parseInt(limit as string) : undefined
+    };
 
-      const jobs = await this.jobService.getAllJobs(filters);
+    const jobs = await this.jobService.getAllJobs(filters);
 
-      res.json({
-        success: true,
-        data: jobs,
-        count: jobs.length
-      });
-
-    } catch (error: any) {
-      res.status(500).json({
+    // FIX: Check if no jobs were found (empty array)
+    if (!jobs || jobs.length === 0) {
+      return res.status(404).json({
         success: false,
-        message: error.message
+        message: 'No jobs found matching your criteria',
+        data: [],
+        count: 0
       });
     }
+
+    // Jobs were found - return success response
+    res.json({
+      success: true,
+      data: jobs,
+      count: jobs.length
+    });
+
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
   }
+}
 
   // Get single job by ID (Public)
   async getJobById(req: Request, res: Response) {
