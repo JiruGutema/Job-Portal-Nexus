@@ -1,5 +1,6 @@
 import app from "./app";
 import pool from "./config/db";
+import { setupSwagger } from "./swagger/swagger";
 
 const PORT = process.env.PORT || 7777;
 
@@ -8,6 +9,8 @@ const PORT = process.env.PORT || 7777;
 pool.on("connect", () => {
   console.log("✅ Connected to PostgreSQL");
 });
+// Swagger UI
+setupSwagger(app);
 
 // Optional: test the connection immediately
 (async () => {
@@ -20,4 +23,5 @@ pool.on("connect", () => {
 })();
 app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);
+  console.log(`📚 Swagger docs at http://localhost:${PORT}/api-docs`);
 });

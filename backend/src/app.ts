@@ -14,7 +14,7 @@ app.get("/current-db", async (req, res) => {
   res.send(result);
 });
 
-app.use("/api", userRoutes);
-app.use("/api", userRoutes);
+app.use("/auth", userRoutes);
+app.use("/auth", userRoutes);
 
 export default app;
