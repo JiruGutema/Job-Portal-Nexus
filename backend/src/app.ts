@@ -1,7 +1,8 @@
 import express from "express";
 import pool from "./config/db";
 import userRoutes from "./routes/user.routes";
-
+import profileRoutes from "./routes/profile.routes";
+import jobRoutes from './routes/job.routes';
 const app = express();
 app.use(express.json());
 
@@ -17,4 +18,10 @@ app.get("/current-db", async (req, res) => {
 app.use("/auth", userRoutes);
 app.use("/auth", userRoutes);
 
+// Mount user routes and profile routes at both /api and root for backwards compatibility
+app.use("/api", userRoutes);
+app.use("/", userRoutes);
+app.use("/api", profileRoutes);
+app.use("/", profileRoutes);
+app.use('/api', jobRoutes);
 export default app;
