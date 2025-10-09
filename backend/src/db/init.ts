@@ -69,6 +69,7 @@ const createSchema = async () => {
       seeker_id INT NOT NULL,
       status application_status DEFAULT 'applied',
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (job_id) REFERENCES jobs(id) ON DELETE CASCADE,
       FOREIGN KEY (seeker_id) REFERENCES users(id) ON DELETE CASCADE
     );
