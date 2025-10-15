@@ -5,11 +5,6 @@ import { removeExpiredTokens } from "./utils/tokenCleanup";
 
 const PORT = process.env.PORT || 7777;
 
-/* pool.connect();
- */ // Event: on successful connection
-// pool.on("connect", () => {
-//   console.log("✅ Connected to PostgreSQL");
-// });
 // Swagger UI
 setupSwagger(app);
 
