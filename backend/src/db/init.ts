@@ -99,6 +99,13 @@ const createSchema = async () => {
     CREATE INDEX IF NOT EXISTS idx_applications_seeker_id ON applications(seeker_id);
     CREATE INDEX IF NOT EXISTS idx_saved_jobs_seeker_id ON saved_jobs(seeker_id);
     CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications(user_id);
+
+CREATE TABLE IF NOT EXISTS revoked_tokens (
+  id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  token TEXT NOT NULL,
+  expires_at TIMESTAMP NOT NULL,
+  revoked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
   `;
 
   try {
@@ -116,3 +123,9 @@ createSchema();
 // First create name `Job_Portal` database in your PostgreSQL server,
 // then Just run `npx ts-node src/db/init.ts` in your terminal to create the tables in your database.
 // Make sure your .env file is set up with the correct database connection details.
+
+
+
+
+CREATE INDEX IF NOT EXISTS idx_revoked_tokens_token ON revoked_tokens(token);
+CREATE INDEX IF NOT EXISTS idx_revoked_tokens_expires_at ON revoked_tokens(expires_at);
