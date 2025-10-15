@@ -15,12 +15,11 @@ app.get("/current-db", async (req, res) => {
   res.send(result);
 });
 
-app.use("auth", userRoutes);
-app.use("auth", userRoutes);
+app.use("/auth", userRoutes);
 
 // Mount user routes and profile routes at both /api and root for backwards compatibility
-app.use("/api", userRoutes);
-app.use("/", userRoutes);
+//app.use("/api", userRoutes);
+//app.use("/", userRoutes);
 app.use("/api", profileRoutes);
 app.use("/", profileRoutes);
 app.use("/api", jobRoutes);
