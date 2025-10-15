@@ -378,7 +378,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Job'
+                      $ref: "#/components/schemas/Job"
                   count:
                     type: integer
         "500":
@@ -426,7 +426,7 @@ paths:
                   message:
                     type: string
                   data:
-                    $ref: '#/components/schemas/Job'
+                    $ref: "#/components/schemas/Job"
         "400":
           description: Validation error
         "403":
@@ -456,7 +456,7 @@ paths:
                   success:
                     type: boolean
                   data:
-                    $ref: '#/components/schemas/Job'
+                    $ref: "#/components/schemas/Job"
         "404":
           description: Job not found
         "500":
@@ -507,7 +507,7 @@ paths:
                   message:
                     type: string
                   data:
-                    $ref: '#/components/schemas/Job'
+                    $ref: "#/components/schemas/Job"
         "400":
           description: Validation error
         "403":
@@ -568,7 +568,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Job'
+                      $ref: "#/components/schemas/Job"
                   count:
                     type: integer
         "403":
@@ -582,4 +582,3 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-  

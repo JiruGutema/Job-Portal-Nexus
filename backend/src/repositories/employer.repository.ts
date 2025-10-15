@@ -13,9 +13,9 @@ const mapRowToEmployer = (r: any): EmployerProfile => {
     description: r.description || r.about || undefined,
     industry: r.industry || undefined,
     logo_url: r.logo_url || undefined,
-  // `name` is sourced from users.name via JOIN below. Email is returned
-  // separately by the service for owner-only responses.
-  name: r.name || undefined,
+    // `name` is sourced from users.name via JOIN below. Email is returned
+    // separately by the service for owner-only responses.
+    name: r.name || undefined,
     ...mapTimestamps(r),
   };
 };
@@ -68,7 +68,13 @@ export const saveEmployerProfile = async (p: EmployerProfile) => {
        industry = EXCLUDED.industry,
        logo_url = EXCLUDED.logo_url,
        updated_at = now()`,
-    [p.user_id, p.company_name || null, p.description || null, (p as any).industry || null, p.logo_url || null]
+    [
+      p.user_id,
+      p.company_name || null,
+      p.description || null,
+      (p as any).industry || null,
+      p.logo_url || null,
+    ]
   );
 
   // Re-fetch the profile joined with user info so we return `name`.
