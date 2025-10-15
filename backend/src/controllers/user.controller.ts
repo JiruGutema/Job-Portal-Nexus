@@ -25,6 +25,7 @@ export const createUsers = async (req: Request, res: Response) => {
     res
       .status(500)
       .json({ error: "Failed to create user", details: err.message });
+    console.log(err.message);
   }
 };
 
@@ -65,8 +66,8 @@ export const login = async (req: Request, res: Response) => {
     delete user.password;
     res.json({
       message: "Login successful",
-      user,
-      token,
+      user: user,
+      token: token,
     });
   } catch (err: any) {
     res.status(401).json({ error: err.message });
