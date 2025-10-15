@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { addUser, loginUser } from "../services/user.service";
 import jwt from "jsonwebtoken";
 import { error, log } from "console";
+import { revokeToken } from "../models/token.model";
 
 export const createUsers = async (req: Request, res: Response) => {
   try {
@@ -71,5 +72,36 @@ export const login = async (req: Request, res: Response) => {
     });
   } catch (err: any) {
     res.status(401).json({ error: err.message });
+  }
+};
+
+// Logout functionality by revoking JWT token
+
+export const logout = async (req: Request, res: Response) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(400).json({ message: "No token provided" });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    // Try to read token expiry from the token so we store accurate expires_at
+    const decoded = jwt.decode(token) as any;
+    let expiresAt = new Date();
+    if (decoded && decoded.exp) {
+      // exp is in seconds since epoch
+      expiresAt = new Date(decoded.exp * 1000);
+    } else {
+      // fallback: one hour from now (or match your token lifetime)
+      expiresAt.setHours(expiresAt.getHours() + 1);
+    }
+
+    await revokeToken(token, expiresAt);
+    return res.json({ message: "Logged out successfully" });
+  } catch (err: any) {
+    return res
+      .status(500)
+      .json({ error: "Failed to logout", details: err.message });
   }
 };
