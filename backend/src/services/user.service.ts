@@ -43,3 +43,36 @@ async function findByEmail(email: string): Promise<User | null> {
   }
   return null;
 }
+
+
+// Change Password
+
+export const changePasswordService = async (
+  userId: number,
+  oldPassword: string,
+  newPassword: string
+) => {
+  // 1. Get the current user
+  const userResult = await pool.query("SELECT * FROM users WHERE id = $1", [userId]);
+  const user = userResult.rows[0];
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  // 2. Verify old password
+  const validPassword = await bcrypt.compare(oldPassword, user.password);
+  if (!validPassword) {
+    throw new Error("Old password is incorrect");
+  }
+
+  // 3. Hash the new password
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  // 4. Update the password
+  await pool.query("UPDATE users SET password = $1 WHERE id = $2", [
+    hashedPassword,
+    userId,
+  ]);
+
+  return { message: "Password changed successfully" };
+};
