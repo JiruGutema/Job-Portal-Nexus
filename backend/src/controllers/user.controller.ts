@@ -3,6 +3,7 @@ import { addUser, loginUser } from "../services/user.service";
 import jwt from "jsonwebtoken";
 import { error, log } from "console";
 import { revokeToken } from "../models/token.model";
+import { changePasswordService } from "../services/user.service";
 
 export const createUsers = async (req: Request, res: Response) => {
   try {
@@ -103,5 +104,22 @@ export const logout = async (req: Request, res: Response) => {
     return res
       .status(500)
       .json({ error: "Failed to logout", details: err.message });
+  }
+};
+
+// Password change functionality can be added here
+
+export const changePassword = async (req: Request, res: Response) => {
+  try {
+    const { userId, oldPassword, newPassword } = req.body;
+
+    if (!userId || !oldPassword || !newPassword) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const result = await changePasswordService(userId, oldPassword, newPassword);
+    res.status(200).json(result);
+  } catch (err: any) {
+    res.status(400).json({ message: err.message });
   }
 };
