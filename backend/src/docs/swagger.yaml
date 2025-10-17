@@ -56,6 +56,34 @@ paths:
         "401":
           description: Unauthorized
 
+  /auth/logout:
+    post:
+      summary: Logout and revoke the current JWT
+      tags:
+        - Auth
+      description: |
+        Revokes the current JWT so it can no longer be used. The token must be supplied
+        in the `Authorization: Bearer <token>` header. This helps implement server-side logout.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Logged out successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logged out successfully
+        "400":
+          description: Bad request (no token provided)
+        "401":
+          description: Unauthorized (invalid or expired token)
+        "500":
+          description: Server error
+
   /auth/change-password:
     put:
       summary: Change user password
