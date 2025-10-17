@@ -44,7 +44,6 @@ async function findByEmail(email: string): Promise<User | null> {
   return null;
 }
 
-
 // Change Password
 
 export const changePasswordService = async (
@@ -53,7 +52,9 @@ export const changePasswordService = async (
   newPassword: string
 ) => {
   // 1. Get the current user
-  const userResult = await pool.query("SELECT * FROM users WHERE id = $1", [userId]);
+  const userResult = await pool.query("SELECT * FROM users WHERE id = $1", [
+    userId,
+  ]);
   const user = userResult.rows[0];
   if (!user) {
     throw new Error("User not found");
@@ -76,3 +77,15 @@ export const changePasswordService = async (
 
   return { message: "Password changed successfully" };
 };
+
+
+// Delete Account
+export const deleteUserService = async (userId: number) => {
+  const userResult = await pool.query("SELECT * FROM users WHERE id = $1", [userId]);
+  if (userResult.rows.length === 0){
+    throw new Error("User not Found");
+  }
+  await pool.query("DELETE FROM users WHERE id = $1", [userId]);
+
+  return { message: "User deleted successfully" };
+}
