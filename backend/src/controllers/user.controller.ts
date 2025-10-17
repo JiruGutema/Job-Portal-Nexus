@@ -1,9 +1,13 @@
 import { Request, Response } from "express";
-import { addUser, loginUser } from "../services/user.service";
+import {
+  addUser,
+  loginUser,
+  changePasswordService,
+  deleteUserService,
+} from "../services/user.service";
 import jwt from "jsonwebtoken";
 import { error, log } from "console";
 import { revokeToken } from "../models/token.model";
-import { changePasswordService } from "../services/user.service";
 
 export const createUsers = async (req: Request, res: Response) => {
   try {
@@ -40,6 +44,23 @@ export const createUsers = async (req: Request, res: Response) => {
 /* export const getAllUsers = (req: Request, res: Response) => {
   res.send("Get all users");
 }; */
+
+// Delete Account functionality
+export const deleteAccount = async (req: Request, res: Response) => {
+  try {
+    const userId = parseInt(req.params.id);
+    if (!userId) {
+      return res.status(404).json({ message: "user Not Found" });
+    }
+
+    const result = await deleteUserService(userId);
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (err: any) {
+    res
+      .status(500)
+      .json({ error: "Failed to delete user", details: err.message });
+  }
+};
 
 // Login functionality with JWT
 export const login = async (req: Request, res: Response) => {
