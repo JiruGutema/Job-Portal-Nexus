@@ -56,6 +56,59 @@ paths:
         "401":
           description: Unauthorized
 
+  /auth/change-password:
+    put:
+      summary: Change user password
+      tags:
+        - Auth
+      description: |
+        Change the password for a user. By default this endpoint accepts a JSON body
+        with `userId`, `oldPassword` and `newPassword`. For security it's recommended
+        to derive `userId` from the authenticated JWT instead of trusting the body.
+        The endpoint verifies the old password, hashes the new password, and updates
+        the user's record.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userId
+                - oldPassword
+                - newPassword
+              properties:
+                userId:
+                  type: integer
+                  description: Numeric id of the user. If your server derives the id from the JWT you can omit this.
+                oldPassword:
+                  type: string
+                  description: Current password for verification
+                newPassword:
+                  type: string
+                  description: New password to set (should meet your password policy)
+      responses:
+        "200":
+          description: Password changed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Password changed successfully
+        "400":
+          description: Bad request (missing/invalid fields or invalid userId)
+        "401":
+          description: Unauthorized (invalid or missing JWT)
+        "403":
+          description: Forbidden (old password incorrect)
+        "500":
+          description: Server error
+
   /profile:
     get:
       summary: Get logged-in user's profile (auto-detects role)
