@@ -78,14 +78,28 @@ export const changePasswordService = async (
   return { message: "Password changed successfully" };
 };
 
-
 // Delete Account
 export const deleteUserService = async (userId: number) => {
-  const userResult = await pool.query("SELECT * FROM users WHERE id = $1", [userId]);
-  if (userResult.rows.length === 0){
+  const userResult = await pool.query("SELECT * FROM users WHERE id = $1", [
+    userId,
+  ]);
+  if (userResult.rows.length === 0) {
     throw new Error("User not Found");
   }
   await pool.query("DELETE FROM users WHERE id = $1", [userId]);
 
   return { message: "User deleted successfully" };
-}
+};
+
+// Get logged-in user
+
+export const getLoggedInUserService = async (userId: number) => {
+  const UserResult = await pool.query(
+    "SELECT id, name, email, role FROM users WHERE id = $1",
+    [userId]
+  );
+  if (UserResult.rows.length === 0) {
+    throw new Error("User not Found");
+  }
+  return UserResult.rows[0];
+};
