@@ -28,4 +28,4 @@ app.listen(PORT, () => {
 // Periodically clean up expired revoked tokens
 setInterval(() => {
   removeExpiredTokens().catch(console.error);
-}, 1000 * 60 * 60); // every hour
+}, 1000 * 60 * 60);
