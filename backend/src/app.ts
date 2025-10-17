@@ -3,6 +3,8 @@ import pool from "./config/db";
 import userRoutes from "./routes/user.routes";
 import profileRoutes from "./routes/profile.routes";
 import jobRoutes from "./routes/job.routes";
+import applicationRoutes from './routes/application.routes';
+import savedJobsRoutes from './routes/savedJobs.routes';
 const app = express();
 app.use(express.json());
 

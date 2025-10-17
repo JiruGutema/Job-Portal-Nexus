@@ -7,6 +7,16 @@ info:
 servers:
   - url: http://localhost:7777/api
 
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
+
 paths:
   /auth/register:
     post:
@@ -532,6 +542,26 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Job"
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        title:
+                          type: string
+                        description:
+                          type: string
+                        requirements:
+                          type: string
+                        location:
+                          type: string
+                        salary_range:
+                          type: string
+                        job_type:
+                          type: string
+                          enum: [full-time, part-time, contract, internship]
+                        created_at:
+                          type: string
+                          format: date-time
                   count:
                     type: integer
         "500":
@@ -580,6 +610,26 @@ paths:
                     type: string
                   data:
                     $ref: "#/components/schemas/Job"
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      title:
+                        type: string
+                      description:
+                        type: string
+                      requirements:
+                        type: string
+                      location:
+                        type: string
+                      salary_range:
+                        type: string
+                      job_type:
+                        type: string
+                        enum: [full-time, part-time, contract, internship]
+                      created_at:
+                        type: string
+                        format: date-time
         "400":
           description: Validation error
         "403":
@@ -610,6 +660,26 @@ paths:
                     type: boolean
                   data:
                     $ref: "#/components/schemas/Job"
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      title:
+                        type: string
+                      description:
+                        type: string
+                      requirements:
+                        type: string
+                      location:
+                        type: string
+                      salary_range:
+                        type: string
+                      job_type:
+                        type: string
+                        enum: [full-time, part-time, contract, internship]
+                      created_at:
+                        type: string
+                        format: date-time
         "404":
           description: Job not found
         "500":
@@ -661,6 +731,26 @@ paths:
                     type: string
                   data:
                     $ref: "#/components/schemas/Job"
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      title:
+                        type: string
+                      description:
+                        type: string
+                      requirements:
+                        type: string
+                      location:
+                        type: string
+                      salary_range:
+                        type: string
+                      job_type:
+                        type: string
+                        enum: [full-time, part-time, contract, internship]
+                      created_at:
+                        type: string
+                        format: date-time
         "400":
           description: Validation error
         "403":
@@ -722,6 +812,26 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Job"
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        title:
+                          type: string
+                        description:
+                          type: string
+                        requirements:
+                          type: string
+                        location:
+                          type: string
+                        salary_range:
+                          type: string
+                        job_type:
+                          type: string
+                          enum: [full-time, part-time, contract, internship]
+                        created_at:
+                          type: string
+                          format: date-time
                   count:
                     type: integer
         "403":
@@ -735,3 +845,236 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+  /jobs/{id}/apply:
+    post:
+      summary: Apply to a job (Job Seeker only)
+      tags:
+        - Applications
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "201":
+          description: Successfully applied to job
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      job_id:
+                        type: integer
+                      seeker_id:
+                        type: integer
+                      status:
+                        type: string
+                        enum: [applied, reviewed, rejected, hired]
+                      created_at:
+                        type: string
+                        format: date-time
+        "401":
+          description: Unauthorized - Missing or invalid token
+        "400":
+          description: Bad request
+        "403":
+          description: Forbidden (not seeker)
+        "409":
+          description: Already applied to this job
+        "500":
+          description: Server error
+
+  /jobs/{id}/applications:
+    get:
+      summary: Get applications for a specific job (Employer only)
+      tags:
+        - Applications
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Applications retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        job_id:
+                          type: integer
+                        seeker_id:
+                          type: integer
+                        status:
+                          type: string
+                          enum: [applied, reviewed, rejected, hired]
+                        created_at:
+                          type: string
+                          format: date-time
+        "401":
+          description: Unauthorized - Missing or invalid token
+        "403":
+          description: Forbidden (not employer)
+        "500":
+          description: Server error
+
+  /applications:
+    get:
+      summary: Get logged-in seeker's job applications
+      tags:
+        - Applications
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Applications retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        job_id:
+                          type: integer
+                        seeker_id:
+                          type: integer
+                        status:
+                          type: string
+                          enum: [applied, reviewed, rejected, hired]
+                        created_at:
+                          type: string
+                          format: date-time
+        "401":
+          description: Unauthorized - Missing or invalid token
+        "403":
+          description: Forbidden (not seeker)
+        "500":
+          description: Server error
+
+  /applications/{id}/status:
+    put:
+      summary: Update application status (Employer only)
+      tags:
+        - Applications
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [reviewed, rejected, hired]
+      responses:
+        "200":
+          description: Application status updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      job_id:
+                        type: integer
+                      seeker_id:
+                        type: integer
+                      status:
+                        type: string
+                        enum: [applied, reviewed, rejected, hired]
+                      created_at:
+                        type: string
+                        format: date-time
+        "401":
+          description: Unauthorized - Missing or invalid token
+        "400":
+          description: Validation error
+        "403":
+          description: Forbidden (not employer)
+        "404":
+          description: Application not found
+        "500":
+          description: Server error
+
+  /applications/{id}:
+    delete:
+      summary: Withdraw application (Job Seeker only)
+      tags:
+        - Applications
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Application withdrawn successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        "401":
+          description: Unauthorized - Missing or invalid token
+        "403":
+          description: Forbidden (not application owner)
+        "404":
+          description: Application not found
+        "500":
+          description: Server error
