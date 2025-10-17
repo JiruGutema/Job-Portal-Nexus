@@ -6,6 +6,8 @@ export interface AuthRequest extends Request {
   user?: { id: number; email?: string; role: string };
 }
 
+const JWT_SECRET = process.env.JWT_SECRET || "secretKey";
+
 export const authenticate = (
   req: AuthRequest,
   res: Response,
@@ -17,10 +19,7 @@ export const authenticate = (
   }
   const token = auth.split(" ")[1];
   try {
-    const payload = jwt.verify(
-      token,
-      process.env.JWT_SECRET || "secretKey"
-    ) as any;
+    const payload = jwt.verify(token, JWT_SECRET) as any;
     req.user = {
       id: payload.id,
       email: payload.email,
@@ -58,7 +57,7 @@ export const authMiddleware = async (
     }
 
     const token = authHeader.split(" ")[1];
-    const secret = process.env.JWT_SECRET || "secretkey";
+    const secret = JWT_SECRET;
 
     // Check blacklist first
     const revoked = await isTokenRevoked(token);
