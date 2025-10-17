@@ -4,10 +4,12 @@ import {
   loginUser,
   changePasswordService,
   deleteUserService,
+  getLoggedInUserService
 } from "../services/user.service";
 import jwt from "jsonwebtoken";
 import { error, log } from "console";
 import { revokeToken } from "../models/token.model";
+import { AuthRequest } from "../middlewares/auth.middleware";
 
 export const createUsers = async (req: Request, res: Response) => {
   try {
@@ -149,3 +151,19 @@ export const changePassword = async (req: Request, res: Response) => {
     console.log(err.message);
   }
 };
+
+// Get logged-in user by ID
+
+export const getLoggedInUser = async (req: AuthRequest, res: Response)=>{
+  try{
+if (!req.user){
+  return res.status(401).json({message: "Unauthorized"});
+}
+
+const UserId = req.user.id;
+const User = await getLoggedInUserService(UserId);
+    res.status(200).json(User);
+  } catch(err: any){
+     res.status(500).json({message: "failed to get user", details: err.message});
+  }
+}
