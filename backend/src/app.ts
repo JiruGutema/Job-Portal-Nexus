@@ -15,7 +15,7 @@ app.get("/current-db", async (req, res) => {
   res.send(result);
 });
 
-app.use("/auth", userRoutes);
+app.use("/api/auth", userRoutes);
 
 // Mount user routes and profile routes at both /api and root for backwards compatibility
 //app.use("/api", userRoutes);
