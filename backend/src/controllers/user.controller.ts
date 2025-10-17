@@ -117,9 +117,14 @@ export const changePassword = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    const result = await changePasswordService(userId, oldPassword, newPassword);
+    const result = await changePasswordService(
+      userId,
+      oldPassword,
+      newPassword
+    );
     res.status(200).json(result);
   } catch (err: any) {
     res.status(400).json({ message: err.message });
+    console.log(err.message);
   }
 };
