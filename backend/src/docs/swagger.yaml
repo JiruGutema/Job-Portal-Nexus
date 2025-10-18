@@ -839,12 +839,6 @@ paths:
         "500":
           description: Server error
 
-components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
   /jobs/{id}/apply:
     post:
       summary: Apply to a job (Job Seeker only)
