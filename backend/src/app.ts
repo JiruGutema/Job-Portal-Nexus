@@ -2,7 +2,7 @@ import express from "express";
 import pool from "./config/db";
 import userRoutes from "./routes/user.routes";
 import profileRoutes from "./routes/profile.routes";
-import jobRoutes from './routes/job.routes';
+import jobRoutes from "./routes/job.routes";
 import applicationRoutes from './routes/application.routes';
 import savedJobsRoutes from './routes/savedJobs.routes';
 const app = express();
@@ -17,18 +17,12 @@ app.get("/current-db", async (req, res) => {
   res.send(result);
 });
 
-// Mount routes at both /api and root for backwards compatibility
-// Mount specific routes BEFORE general routes
-app.use('/', savedJobsRoutes);  // Saved jobs routes FIRST
-app.use('/', jobRoutes);        // General job routes SECOND  
-app.use('/', applicationRoutes);
-app.use('/', userRoutes);
-app.use('/', profileRoutes);
+app.use("/api/auth", userRoutes);
 
-app.use("/api", savedJobsRoutes);  // FIRST
-app.use("/api", jobRoutes);        // SECOND
-app.use("/api", applicationRoutes);
-app.use("/api", userRoutes);
+// Mount user routes and profile routes at both /api and root for backwards compatibility
+//app.use("/api", userRoutes);
+//app.use("/", userRoutes);
 app.use("/api", profileRoutes);
-
+app.use("/", profileRoutes);
+app.use("/api", jobRoutes);
 export default app;

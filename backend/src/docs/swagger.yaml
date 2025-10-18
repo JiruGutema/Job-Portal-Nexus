@@ -66,6 +66,159 @@ paths:
         "401":
           description: Unauthorized
 
+  /auth/logout:
+    post:
+      summary: Logout and revoke the current JWT
+      tags:
+        - Auth
+      description: |
+        Revokes the current JWT so it can no longer be used. The token must be supplied
+        in the `Authorization: Bearer <token>` header. This helps implement server-side logout.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Logged out successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logged out successfully
+        "400":
+          description: Bad request (no token provided)
+        "401":
+          description: Unauthorized (invalid or expired token)
+        "500":
+          description: Server error
+
+  /auth/change-password:
+    put:
+      summary: Change user password
+      tags:
+        - Auth
+      description: |
+        Change the password for a user. By default this endpoint accepts a JSON body
+        with `userId`, `oldPassword` and `newPassword`. For security it's recommended
+        to derive `userId` from the authenticated JWT instead of trusting the body.
+        The endpoint verifies the old password, hashes the new password, and updates
+        the user's record.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userId
+                - oldPassword
+                - newPassword
+              properties:
+                userId:
+                  type: integer
+                  description: Numeric id of the user. If your server derives the id from the JWT you can omit this.
+                oldPassword:
+                  type: string
+                  description: Current password for verification
+                newPassword:
+                  type: string
+                  description: New password to set (should meet your password policy)
+      responses:
+        "200":
+          description: Password changed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Password changed successfully
+        "400":
+          description: Bad request (missing/invalid fields or invalid userId)
+        "401":
+          description: Unauthorized (invalid or missing JWT)
+        "403":
+          description: Forbidden (old password incorrect)
+        "500":
+          description: Server error
+
+  /auth/delete-account/{id}:
+    delete:
+      summary: Delete a user account
+      tags:
+        - Auth
+      description: |
+        Permanently delete the user account identified by the path parameter `id`.
+        The route is protected and requires a valid Bearer JWT. In production you should
+        typically only allow users to delete their own account (verify `req.user.id`).
+        The endpoint returns 200 on success.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Numeric id of the user to delete
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User deleted successfully
+        "401":
+          description: Unauthorized (missing/invalid JWT)
+        "403":
+          description: Forbidden (not allowed to delete this account)
+        "404":
+          description: User not found
+        "500":
+          description: Server error
+
+  /auth/me:
+    get:
+      summary: Get currently authenticated user's basic info
+      tags:
+        - Auth
+      description: |
+        Returns the basic information for the currently authenticated user. Requires a valid Bearer JWT in the Authorization header.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Authenticated user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  role:
+                    type: string
+                  created_at:
+                    type: string
+                    format: date-time
+        "401":
+          description: Unauthorized (missing/invalid token)
+        "500":
+          description: Server error
+
   /profile:
     get:
       summary: Get logged-in user's profile (auto-detects role)
@@ -388,6 +541,7 @@ paths:
                   data:
                     type: array
                     items:
+                      $ref: "#/components/schemas/Job"
                       type: object
                       properties:
                         id:
@@ -455,6 +609,7 @@ paths:
                   message:
                     type: string
                   data:
+                    $ref: "#/components/schemas/Job"
                     type: object
                     properties:
                       id:
@@ -504,6 +659,7 @@ paths:
                   success:
                     type: boolean
                   data:
+                    $ref: "#/components/schemas/Job"
                     type: object
                     properties:
                       id:
@@ -574,6 +730,7 @@ paths:
                   message:
                     type: string
                   data:
+                    $ref: "#/components/schemas/Job"
                     type: object
                     properties:
                       id:
@@ -654,6 +811,7 @@ paths:
                   data:
                     type: array
                     items:
+                      $ref: "#/components/schemas/Job"
                       type: object
                       properties:
                         id:
@@ -681,6 +839,12 @@ paths:
         "500":
           description: Server error
 
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   /jobs/{id}/apply:
     post:
       summary: Apply to a job (Job Seeker only)
