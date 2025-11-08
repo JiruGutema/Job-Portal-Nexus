@@ -5,6 +5,7 @@ import profileRoutes from "./routes/profile.routes";
 import jobRoutes from "./routes/job.routes";
 import applicationRoutes from './routes/application.routes';
 import savedJobsRoutes from './routes/savedJobs.routes';
+import notificationRoutes from './routes/notification.route';
 const app = express();
 app.use(express.json());
 
@@ -17,6 +18,7 @@ app.get("/current-db", async (req, res) => {
   res.send(result);
 });
 
+app.use("/notifications", notificationRoutes);
 app.use("/api/auth", userRoutes);
 
 // Mount user routes and profile routes at both /api and root for backwards compatibility

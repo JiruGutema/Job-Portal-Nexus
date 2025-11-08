@@ -12,5 +12,5 @@ export interface JobSeekerProfile {
 
 export default JobSeekerProfile;
 
-// - Models define the data shape returned by repositories/services; 
+// - Models define the data shape returned by repositories/services;
 // optional fields are marked with `?`.
