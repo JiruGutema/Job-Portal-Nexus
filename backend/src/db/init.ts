@@ -30,6 +30,7 @@ const createSchema = async () => {
       email VARCHAR(100) UNIQUE NOT NULL,
       password VARCHAR(255) NOT NULL,
       role user_role NOT NULL,
+      banned BOOLEAN DEFAULT false,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
@@ -65,6 +66,7 @@ const createSchema = async () => {
       location VARCHAR(100),
       salary_range VARCHAR(50),
       job_type job_types,
+      removed_by_admin BOOLEAN DEFAULT false,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (employer_id) REFERENCES users(id) ON DELETE CASCADE
@@ -100,6 +102,10 @@ const createSchema = async () => {
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     );
+
+    -- Add soft-ban and soft-remove columns if they don't exist
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS banned BOOLEAN DEFAULT FALSE;
+    ALTER TABLE jobs ADD COLUMN IF NOT EXISTS removed_by_admin BOOLEAN DEFAULT FALSE;
 
     CREATE TABLE IF NOT EXISTS revoked_tokens (
       id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -157,7 +163,16 @@ const createSchema = async () => {
 
   try {
     await pool.query(query);
-    console.log("✅ Schema, columns, and triggers checked/created successfully!");
+    // Ensure soft-ban / soft-remove columns exist on existing DBs
+    await pool.query(
+      "ALTER TABLE users ADD COLUMN IF NOT EXISTS banned BOOLEAN DEFAULT false"
+    );
+    await pool.query(
+      "ALTER TABLE jobs ADD COLUMN IF NOT EXISTS removed_by_admin BOOLEAN DEFAULT false"
+    );
+    console.log(
+      "✅ Schema, columns, and triggers checked/created successfully!"
+    );
   } catch (err) {
     console.error("❌ Error creating schema:", err);
   } finally {
@@ -166,7 +181,6 @@ const createSchema = async () => {
 };
 
 createSchema();
-
 
 // First create name `Job_Portal` database in your PostgreSQL server,
 // then Just run `npx ts-node src/db/init.ts` in your terminal to create the tables in your database.
